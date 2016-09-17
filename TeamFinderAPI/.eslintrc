@@ -1,8 +1,8 @@
 {
   "rules": {
     "indent": [
-      4,
-      4,
+      2,
+      2,
       {
         "SwitchCase": 1
       }
@@ -17,6 +17,15 @@
     "no-use-before-define": [
       2,
       "nofunc"
+    ],
+    "no-multi-spaces": [
+      1,
+      {
+        "exceptions":
+        {
+          "VariableDeclarator": true
+        }
+      }
     ],
     // TODO: turn on later
     "comma-dangle": [

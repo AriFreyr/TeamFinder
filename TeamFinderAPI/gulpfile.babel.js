@@ -3,7 +3,6 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
 import del from 'del';
 import runSequence from 'run-sequence';
-import babelCompiler from 'babel-core/register';
 
 const plugins = gulpLoadPlugins();
 
@@ -72,8 +71,6 @@ gulp.task('nodemon', ['lint', 'copy', 'babel'], () =>
     tasks: ['lint', 'copy', 'babel']
   })
 );
-
-
 
 // gulp serve for development
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));

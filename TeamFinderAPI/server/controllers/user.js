@@ -1,10 +1,14 @@
-import User from '../models/user';
+import Models from '../models';
 
 /**
  * Load user and append to req.
  */
 function load(req, res, next, id) {
-  User.get(id).then((user) => {
+  Models.User.findOne({
+    where: {
+      id
+    }
+  }).then((user) => {
     req.user = user;		// eslint-disable-line no-param-reassign
     return next();
   }).error((e) => next(e));
@@ -25,13 +29,10 @@ function get(req, res) {
  * @returns {User}
  */
 function create(req, res, next) {
-  const user = new User({
+  Models.User.create({
     username: req.body.username,
     mobileNumber: req.body.mobileNumber
-  });
-
-  user.saveAsync()
-    .then((savedUser) => res.json(savedUser))
+  }).then((user) => res.json(user))
     .error((e) => next(e));
 }
 
@@ -43,11 +44,11 @@ function create(req, res, next) {
  */
 function update(req, res, next) {
   const user = req.user;
-  user.username = req.body.username;
-  user.mobileNumber = req.body.mobileNumber;
 
-  user.saveAsync()
-    .then((savedUser) => res.json(savedUser))
+  user.update({
+    username: req.body.username,
+    mobileNumber: req.body.mobileNumber
+  }).then((savedUser) => res.json(savedUser))
     .error((e) => next(e));
 }
 
@@ -58,8 +59,8 @@ function update(req, res, next) {
  * @returns {User[]}
  */
 function list(req, res, next) {
-  const { limit = 50, skip = 0 } = req.query;
-  User.list({ limit, skip }).then((users) =>	res.json(users))
+  const { limit = 50, offset = 0 } = req.query;
+  Models.User.findAll({ offset, limit }).then((users) =>	res.json(users))
     .error((e) => next(e));
 }
 
@@ -69,7 +70,7 @@ function list(req, res, next) {
  */
 function remove(req, res, next) {
   const user = req.user;
-  user.removeAsync()
+  user.destroy()
     .then((deletedUser) => res.json(deletedUser))
     .error((e) => next(e));
 }

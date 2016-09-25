@@ -6,7 +6,7 @@ const debug = require('debug')('team-finder-api:index');
 
 // listen on port config.port
 
-Models.sequelize.sync().then(() => {
+Models.sequelize.sync({ force: true }).then(() => {
   app.listen(config.port, () => {
     debug(`server started on port ${config.port} (${config.env})`);
   });

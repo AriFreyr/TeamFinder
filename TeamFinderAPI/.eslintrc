@@ -27,6 +27,12 @@
         }
       }
     ],
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
     // TODO: turn on later
     "comma-dangle": [
       0

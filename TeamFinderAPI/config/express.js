@@ -9,6 +9,7 @@ import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
+import expressJwt from 'express-jwt';
 import winstonInstance from './winston';
 import routes from '../server/routes';
 import config from './env';
@@ -20,6 +21,17 @@ const app = express();
 if (config.env === 'development') {
   app.use(logger('dev'));
 }
+
+// Add web token authentication middleware
+app.use(expressJwt({ secret: config.jwtSecret }).unless({
+  path: [
+    '/api/auth/login',
+    {
+      url: '/api/users',
+      method: 'POST'
+    }
+  ]
+}));
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());

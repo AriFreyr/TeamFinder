@@ -1,10 +1,31 @@
+import bcrypt from 'bcrypt';
+
 /**
  * @typedef User
  */
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
+  function hashPassword(user) {
+    console.log(user);
+    if (!user.changed('password')) {
+      return sequelize.Promise.resolve();
+    }
+    // TODO: MAKE ASYNC WORK
+    /* return bcrypt.hash(user.password, 10, (err, hash) => {
+      user.setDataValue('password', hash);
+    }); */
+    user.setDataValue('password', bcrypt.hashSync(user.password, 10));
+  }
+
+  const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     mobileNumber: {
       type: DataTypes.STRING,
@@ -14,6 +35,23 @@ export default (sequelize, DataTypes) => {
           msg: 'The value is not a valid mobile number.'
         }
       }
+    },
+  }, {
+    classMethods: {
+      associate: (models) => {
+        User.belongsToMany(models.Group, { through: 'UserGroup' });
+      }
+    },
+    instanceMethods: {
+      checkPassword: (password, hash, cb) => {
+        bcrypt.compare(password, hash, (err, res) => {
+          cb(res);
+        });
+      }
+    },
+    hooks: {
+      beforeCreate: hashPassword,
+      beforeUpdate: hashPassword
     }
   });
 

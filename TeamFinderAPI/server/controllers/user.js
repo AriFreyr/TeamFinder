@@ -31,7 +31,8 @@ function get(req, res) {
 function create(req, res, next) {
   Models.User.create({
     username: req.body.username,
-    mobileNumber: req.body.mobileNumber
+    mobileNumber: req.body.mobileNumber,
+    password: req.body.password
   }).then((user) => res.json(user))
     .error((e) => next(e));
 }
@@ -47,7 +48,8 @@ function update(req, res, next) {
 
   user.update({
     username: req.body.username,
-    mobileNumber: req.body.mobileNumber
+    mobileNumber: req.body.mobileNumber,
+    password: req.body.password
   }).then((savedUser) => res.json(savedUser))
     .error((e) => next(e));
 }

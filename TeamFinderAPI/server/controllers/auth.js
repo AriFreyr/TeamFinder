@@ -17,10 +17,10 @@ function login(req, res, next) {
       username: req.body.username
     }
   }).then((user) => {
-    console.log(user);
     user.checkPassword(req.body.password, user.password, (valid) => {
       if (valid) {
         const token = jwt.sign({
+          userid: user.id,
           username: user.username
         }, config.jwtSecret);
         return res.json({
@@ -45,7 +45,7 @@ function login(req, res, next) {
 function getRandomNumber(req, res) {
   // req.user is assigned by jwt middleware if valid token is provided
   return res.json({
-    user: req.user,
+    user: req.auth,
     num: Math.random() * 100
   });
 }

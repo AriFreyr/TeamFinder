@@ -23,7 +23,7 @@ if (config.env === 'development') {
 }
 
 // Add web token authentication middleware
-app.use(expressJwt({ secret: config.jwtSecret }).unless({
+app.use(expressJwt({ secret: config.jwtSecret, requestProperty: 'auth' }).unless({
   path: [
     '/api/auth/login',
     {

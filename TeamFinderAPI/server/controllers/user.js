@@ -7,7 +7,14 @@ function load(req, res, next, id) {
   Models.User.findOne({
     where: {
       id
-    }
+    },
+    include: [{
+      model: Models.Group,
+      through: {
+        attributes: ['createdAt', 'admin']
+      },
+      as: 'groups'
+    }]
   }).then((user) => {
     req.user = user;		// eslint-disable-line no-param-reassign
     return next();

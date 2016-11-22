@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt';
  */
 export default (sequelize, DataTypes) => {
   function hashPassword(user) {
-    console.log(user);
     if (!user.changed('password')) {
       return sequelize.Promise.resolve();
     }
@@ -36,10 +35,16 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: true
+      }
+    }
   }, {
     classMethods: {
       associate: (models) => {
-        User.belongsToMany(models.Group, { through: 'UserGroup' });
+        User.belongsToMany(models.Group, { through: models.UserGroup, as: 'groups' });
       }
     },
     instanceMethods: {
